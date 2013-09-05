@@ -12,3 +12,11 @@ bill@ardanstudios.com
 
 GoingGo.net Post:
 http://www.goinggo.net/2013/09/timer-routines-and-graceful-shutdowns.html
+
+	-- Get, build and install the code
+	export GOPATH=$HOME/goinggo
+	go get github.com/goinggo/timerdesignpattern
+	
+	-- Run the code
+	cd $GOPATH/bin
+	./timerdesignpattern

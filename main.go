@@ -6,9 +6,9 @@
 	This program provides an sample to learn how to implement a timer
 	routine and graceful shutdown pattern.
 
-	Ardan Studios<br />
-	12973 SW 112 ST, Suite 153<br />
-	Miami, FL 33186<br />
+	Ardan Studios
+	12973 SW 112 ST, Suite 153
+	Miami, FL 33186
 	bill@ardanstudios.com
 
 	http://www.goinggo.net/2013/09/timer-routines-and-graceful-shutdowns.html
