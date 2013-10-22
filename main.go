@@ -24,7 +24,6 @@ import (
 
 // main is the starting point of the program
 func main() {
-
 	helper.WriteStdout("main", "main", "Starting Program")
 
 	workmanager.Startup()
