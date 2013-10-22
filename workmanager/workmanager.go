@@ -10,6 +10,7 @@ package workmanager
 
 import (
 	"github.com/goinggo/timerdesignpattern/helper"
+	"sync/atomic"
 	"time"
 )
 
@@ -19,7 +20,7 @@ const (
 
 // _WorkManager is responsible for starting and shutting down the program
 type _WorkManager struct {
-	Shutdown        bool
+	Shutdown        int32
 	ShutdownChannel chan string
 }
 
@@ -34,7 +35,7 @@ func Startup() (err error) {
 
 	// Create the work manager to get the program going
 	_This = &_WorkManager{
-		Shutdown:        false,
+		Shutdown:        0,
 		ShutdownChannel: make(chan string),
 	}
 
@@ -56,7 +57,7 @@ func Shutdown() (err error) {
 
 	// Shutdown the program
 	helper.WriteStdout("main", "workmanager.Shutdown", "Info : Shutting Down")
-	_This.Shutdown = true
+	atomic.CompareAndSwapInt32(&_This.Shutdown, 0, 1)
 
 	helper.WriteStdout("main", "workmanager.Shutdown", "Info : Shutting Down Work Timer")
 	_This.ShutdownChannel <- "Down"
@@ -120,7 +121,7 @@ func (this *_WorkManager) PerformTheWork() {
 	// Perform work for 10 seconds
 	for count := 0; count < 40; count++ {
 
-		if this.Shutdown == true {
+		if atomic.CompareAndSwapInt32(&_This.Shutdown, 1, 1) == true {
 
 			helper.WriteStdout("WorkTimer", "_WorkManager.GoRoutine_WorkTimer", "Info : Request To Shutdown")
 			return
