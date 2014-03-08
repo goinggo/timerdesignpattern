@@ -1,5 +1,5 @@
 // Copyright 2013 Ardan Studios. All rights reserved.
-// Use of this source code is governed by a BSD-style
+// Use of workManager source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
 /*
@@ -39,7 +39,7 @@ func Startup() (err error) {
 	}
 
 	// Start the work timer routine.
-	// When this returns the program terminates
+	// When workManager returns the program terminates
 	go _This.GoRoutineworkTimer()
 
 	helper.WriteStdout("main", "workmanager.Startup", "Completed")
@@ -67,7 +67,7 @@ func Shutdown() (err error) {
 }
 
 // GoRoutineworkTimer perform the work on the defined interval
-func (this *workManager) GoRoutineworkTimer() {
+func (workManager *workManager) GoRoutineworkTimer() {
 	helper.WriteStdout("WorkTimer", "workManager.GoRoutineworkTimer", "Started")
 
 	wait := TIMER_PERIOD
@@ -76,10 +76,10 @@ func (this *workManager) GoRoutineworkTimer() {
 		helper.WriteStdoutf("WorkTimer", "workManager.GoRoutineworkTimer", "Info : Wait To Run : Seconds[%.0f]", wait.Seconds())
 
 		select {
-		case <-this.ShutdownChannel:
+		case <-workManager.ShutdownChannel:
 			helper.WriteStdoutf("WorkTimer", "workManager.GoRoutineworkTimer", "Shutting Down")
 
-			this.ShutdownChannel <- "Down"
+			workManager.ShutdownChannel <- "Down"
 			return
 
 		case <-time.After(wait):
@@ -91,19 +91,19 @@ func (this *workManager) GoRoutineworkTimer() {
 		startTime := time.Now()
 
 		// Perform the work
-		this.PerformTheWork()
+		workManager.PerformTheWork()
 
 		// Mark the ending time
 		endTime := time.Now()
 
-		// Caluclate the amount of time to wait to start this again
+		// Caluclate the amount of time to wait to start workManager again
 		duration := endTime.Sub(startTime)
 		wait = TIMER_PERIOD - duration
 	}
 }
 
 // PerformTheWork simulate some silly display work with silly sleep times
-func (this *workManager) PerformTheWork() {
+func (workManager *workManager) PerformTheWork() {
 	defer helper.CatchPanic(nil, "workManager", "WorkManager.PerformTheWork")
 
 	helper.WriteStdout("WorkTimer", "workManager.GoRoutineworkTimer", "Started")
